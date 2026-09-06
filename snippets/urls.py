@@ -8,25 +8,39 @@ urlpatterns = [
 
     # /snippets/
     #
-    # GET  → list all snippets
-    # POST → create a new snippet
-    path("snippets/", views.snippet_list),
+    # SnippetList is a class-based view.
+    # .as_view() converts the class into a view
+    # that Django can use for this URL.
+    #
+    # GET  → SnippetList.get()
+    # POST → SnippetList.post()
+    path(
+        "snippets/",
+        views.SnippetList.as_view()
+    ),
 
     # /snippets/<id>/
     #
-    # GET    → retrieve one snippet
-    # PUT    → update one snippet
-    # DELETE → delete one snippet
-    path("snippets/<int:pk>/", views.snippet_detail),
+    # GET    → SnippetDetail.get()
+    # PUT    → SnippetDetail.put()
+    # DELETE → SnippetDetail.delete()
+    path(
+        "snippets/<int:pk>/",
+        views.SnippetDetail.as_view()
+    ),
 ]
 
 
-# Add optional format suffixes to our API URLs.
-# This allows:
+# Add optional format suffixes.
+#
+# This allows URLs such as:
+#
 # /snippets/
 # /snippets.json
 # /snippets.api
-# And for individual snippets:
+#
+# And:
+#
 # /snippets/1/
 # /snippets/1.json
 # /snippets/1.api
