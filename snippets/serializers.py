@@ -1,22 +1,36 @@
+from django.contrib.auth.models import User
+
 from rest_framework import serializers
+
 from snippets.models import Snippet
 
 
-# ModelSerializer automatically creates serializer fields
-# based on the fields defined in the Snippet model.
 class SnippetSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source="owner.username")
 
     class Meta:
-        # Tell DRF which Django model this serializer is connected to.
         model = Snippet
-
-        # Tell DRF which model fields should be included
-        # in the API representation.
         fields = [
             "id",
+            "owner",
             "title",
             "code",
             "linenos",
             "language",
             "style",
+        ]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    snippets = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=Snippet.objects.all()
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "username",
+            "snippets",
         ]
